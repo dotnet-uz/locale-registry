@@ -1,1 +1,1 @@
-# locale-registry
+# Locale Registry
