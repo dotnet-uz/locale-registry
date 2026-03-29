@@ -1,0 +1,26 @@
+services:
+  registry:
+    image: registry:2
+    expose:
+      - 5000
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+    volumes:
+      - registry-data:/var/lib/registry
+    restart: unless-stopped
+
+  proxy:
+    image: nginx:alpine
+    ports:
+      - 5555:443
+    volumes:
+      - ./../certs:/etc/nginx/certs:ro
+      - ./../auth:/etc/nginx/auth:ro
+      - ./logs:/etc/nginx/logs
+      - ./default.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - registry
+    restart: always
+
+volumes:
+  registry-data:
